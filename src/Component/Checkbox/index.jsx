@@ -21,7 +21,7 @@ export const CheckboxList = ({ items, onItemChange }) => {
             </p>
             <input
               type="checkbox"
-              checked={item.selected}
+              checked={item.selected|| false}
               onChange={() => onItemChange(item.id, !item.selected)}
             />
           </div>

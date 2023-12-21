@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckboxList } from "./Component/Checkbox";
 import { RadioList } from "./Component/RadioBtn";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";
+
 const App = () => {
   const [addQuantity, setAddQuantity] = useState(1);
 
@@ -15,9 +16,9 @@ const App = () => {
     {
       type: "checkBox",
       data: [
-        { id: 1, label: "Beard Trim", selected: false, price: 32 },
-        { id: 2, label: "Head Shave", selected: false, price: 40 },
-        { id: 3, label: "Deluxe Cut", selected: false, price: 80 },
+        { id: 1, label: "Beard Trim", price: 32 },
+        { id: 2, label: "Head Shave", price: 40 },
+        { id: 3, label: "Deluxe Cut", price: 80 },
       ],
     },
   ]);
@@ -31,13 +32,40 @@ const App = () => {
   };
 
   const handleCheckboxChange = (itemId, selected) => {
-    const checkBoxItems = products.find(
-      (element) => element.type === "checkBox"
-    ).data;
-    const updatedItems = checkBoxItems.map((item) =>
-      item.id === itemId ? { ...item, selected } : item
-    );
+    // const checkBoxItems = products.find(
+    //   (element) => element.type === "checkBox"
+    // ).data;
+    // const updatedItems = checkBoxItems.map((item) =>
+    //   item.id === itemId ? { ...item, selected } : item
+    // );
+    // setProducts((preval) => {
+    //   return preval.map((ele) => {
+    //     if (ele.type === "checkBox") {
+    //       return { ...ele, data: updatedItems };
+    //     } else {
+    //       return ele;
+    //     }
+    //   });
+    // });
+
     setProducts((preval) => {
+      const checkBoxItems = products.find(
+        (element) => element.type === "checkBox"
+      ).data;
+
+      const updatedItems = [];
+
+      checkBoxItems.forEach((element) => {
+        if (element.id === itemId) {
+          updatedItems.push({
+            ...element,
+            selected: selected ? true : undefined,
+          });
+        } else {
+          updatedItems.push(element);
+        }
+      });
+
       return preval.map((ele) => {
         if (ele.type === "checkBox") {
           return { ...ele, data: updatedItems };
@@ -47,6 +75,19 @@ const App = () => {
       });
     });
   };
+
+  useEffect(() => {
+    console.log(products);
+    const str = 'Shanu'
+    console.log(str.split('').toString())
+
+    const obj={
+      name:'hh',
+      surname:'hhh'
+    }
+
+    console.log(Object.keys(obj))
+  }, [products]);
 
   const handleRadioChange = (itemId) => {
     setSelectedRadio(itemId);
@@ -70,7 +111,7 @@ const App = () => {
     // TODO:
     return total * addQuantity;
   };
-
+console.log("114",calculateTotal())
   return (
     <div className="flex justify-center mt-5">
       <div className="h-full w-[500px]  p-5 shadow-2xl  shadow-black ">
@@ -106,7 +147,9 @@ const App = () => {
             <h1> {addQuantity} </h1>
             <AddIcon
               onClick={() => {
-                setAddQuantity(addQuantity + 1);
+                const total=calculateTotal()
+                total&& setAddQuantity(addQuantity + 1)
+               
               }}
             />
           </div>
